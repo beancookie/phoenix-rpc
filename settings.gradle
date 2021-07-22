@@ -1,0 +1,5 @@
+rootProject.name = 'phoenix-rpc'
+include 'rpc-server'
+include 'common'
+include 'rpc-client'
+
