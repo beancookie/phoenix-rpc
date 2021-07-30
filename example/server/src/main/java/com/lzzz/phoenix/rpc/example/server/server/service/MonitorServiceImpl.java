@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class MonitorServiceImpl implements MonitorService {
 
     @Override
-    public void listen() {
-
+    public String listen() {
+        return "listening";
     }
 }

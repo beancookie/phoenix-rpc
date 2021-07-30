@@ -90,3 +90,5 @@ application.yaml
 application.properties
 logback.xml
 bootstrap.yml
+
+logs
