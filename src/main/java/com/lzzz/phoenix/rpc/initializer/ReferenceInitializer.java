@@ -1,7 +1,8 @@
-package com.lzzz.phoenix.rpc;
+package com.lzzz.phoenix.rpc.initializer;
 
 import com.alibaba.nacos.api.exception.NacosException;
 import com.lzzz.phoenix.common.annotation.PhoenixReference;
+import com.lzzz.phoenix.rpc.ReferenceContext;
 import com.lzzz.phoenix.rpc.discovery.NacosServiceDiscovery;
 import com.lzzz.phoenix.rpc.discovery.ServiceDiscovery;
 import com.lzzz.phoenix.rpc.proxy.InvokerProxy;
@@ -39,7 +40,7 @@ public class ReferenceInitializer implements ProxyFactory<Object>, BeanPostProce
                 try {
                     field.setAccessible(true);
                     if (reference.interfaceClass() == void.class) {
-                        field.set(bean, createReference(field.getClass(), reference.version()));
+                        field.set(bean, createReference(field.getType(), reference.version()));
                     } else {
                         field.set(bean, createReference(reference.interfaceClass(), reference.version()));
                     }

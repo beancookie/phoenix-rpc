@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-    @PhoenixReference(interfaceClass = HelloService.class, version = "1.0")
+    @PhoenixReference
     private HelloService helloService;
 
     @GetMapping("/hello")

@@ -6,7 +6,7 @@ import com.lzzz.phoenix.rpc.example.service.HelloService;
 import org.springframework.stereotype.Service;
 
 @Service
-@PhoenixService
+@PhoenixService(interfaceClass = HelloService.class)
 public class HelloServiceImpl implements HelloService {
     public HelloDTO sayHello() {
         return new HelloDTO(1, "abc");

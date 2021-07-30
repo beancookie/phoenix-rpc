@@ -1,6 +1,6 @@
 package com.lzzz.phoenix.rpc.example.client.config;
 
-import com.lzzz.phoenix.rpc.ReferenceInitializer;
+import com.lzzz.phoenix.rpc.initializer.ReferenceInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

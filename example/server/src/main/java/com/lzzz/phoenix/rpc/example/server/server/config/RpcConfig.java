@@ -1,6 +1,6 @@
 package com.lzzz.phoenix.rpc.example.server.server.config;
 
-import com.lzzz.phoenix.rpc.ServiceInitializer;
+import com.lzzz.phoenix.rpc.initializer.ServiceInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

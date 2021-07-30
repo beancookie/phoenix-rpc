@@ -1,6 +1,6 @@
 package com.lzzz.phoenix;
 
-import com.lzzz.phoenix.rpc.ServiceInitializer;
+import com.lzzz.phoenix.rpc.initializer.ServiceInitializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;

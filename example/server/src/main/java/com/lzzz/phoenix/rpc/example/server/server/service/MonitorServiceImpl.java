@@ -7,7 +7,7 @@ import com.lzzz.phoenix.rpc.example.service.MonitorService;
 import org.springframework.stereotype.Service;
 
 @Service
-@PhoenixService
+@PhoenixService(interfaceClass = MonitorService.class)
 public class MonitorServiceImpl implements MonitorService {
 
     @Override

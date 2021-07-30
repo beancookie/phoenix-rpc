@@ -1,6 +1,7 @@
-package com.lzzz.phoenix.rpc;
+package com.lzzz.phoenix.rpc.initializer;
 
 import com.lzzz.phoenix.common.annotation.PhoenixService;
+import com.lzzz.phoenix.rpc.NettyServer;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -31,11 +32,7 @@ public class ServiceInitializer extends NettyServer implements ApplicationContex
 
         serviceBeanMap.forEach((name, bean) -> {
             PhoenixService service = bean.getClass().getAnnotation(PhoenixService.class);
-            if (service.interfaceClass() == void.class) {
-                super.addService(bean.getClass().getName(), service.version(), bean);
-            } else {
-                super.addService(service.interfaceClass().getName(), service.version(), bean);
-            }
+            super.addService(service.interfaceClass().getName(), service.version(), bean);
         });
     }
 }

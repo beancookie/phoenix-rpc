@@ -5,12 +5,14 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
+import com.google.common.collect.Lists;
 import com.lzzz.phoenix.common.exception.ServiceNotFoundException;
 import com.lzzz.phoenix.common.protocol.ServiceProtocol;
 import com.lzzz.phoenix.common.protocol.SimpleProtocol;
 import com.lzzz.phoenix.common.util.ProtocolUtils;
 import com.lzzz.phoenix.rpc.ReferenceContext;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -31,8 +33,8 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
     }
 
     private Set<ServiceProtocol> convertServiceProtocol(String serviceProtocolsMeta) {
-        return Stream.of(serviceProtocolsMeta.split(SERVICE_SPLIT))
-            .map(serviceProtocolMeta -> ProtocolUtils.resolveServiceProtocol(serviceProtocolsMeta))
+        return Arrays.stream(serviceProtocolsMeta.split(SERVICE_SPLIT))
+            .map(ProtocolUtils::resolveServiceProtocol)
             .collect(Collectors.toSet());
     }
 
