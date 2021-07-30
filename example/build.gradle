@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.3'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+
+group = 'com.lzzz.phoenix.rpc.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+allprojects {
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/'}
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/spring/' }
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'com.lzzz.phoenix:rpc:1.0-SNAPSHOT'
+        implementation 'com.google.guava:guava:30.1.1-jre'
+
+//    implementation 'com.lzzz.phoenix:spring-boot-starter:1.0-SNAPSHOT'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.testng:testng:7.1.0'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}

@@ -1,0 +1,10 @@
+plugins {
+    id 'java'
+}
+
+group 'com.lzzz.phoenix.rpc.example'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
