@@ -2,7 +2,7 @@
 <h3 align="center">轻量级Java RPC框架</h3>
 
 ### 快速开始
-#### Spring
+#### 1. Spring
 ```java
 public interface HelloService {
     HelloDTO sayHello();
@@ -90,5 +90,5 @@ public class RpcConfig {
 }
 ```
 
-#### Spring Boot
+#### 2. Spring Boot
 // todo
