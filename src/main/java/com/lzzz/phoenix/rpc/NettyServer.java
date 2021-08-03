@@ -3,6 +3,7 @@ package com.lzzz.phoenix.rpc;
 import com.alibaba.nacos.api.exception.NacosException;
 import com.lzzz.phoenix.common.codec.RpcDecoder;
 import com.lzzz.phoenix.common.codec.RpcEncoder;
+import com.lzzz.phoenix.common.constant.IdleStateConstants;
 import com.lzzz.phoenix.common.model.RpcRequest;
 import com.lzzz.phoenix.common.model.RpcResponse;
 import com.lzzz.phoenix.common.protocol.ServiceProtocol;
@@ -17,12 +18,15 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +67,7 @@ public class NettyServer implements Server {
     @Override
     public void start() {
         this.bossGroup = new NioEventLoopGroup();
-        this.workerGroup = new NioEventLoopGroup();
+        this.workerGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 2);
         try {
             ServerBootstrap bootstrap = new ServerBootstrap();
             bootstrap.group(bossGroup, workerGroup)
@@ -72,6 +76,8 @@ public class NettyServer implements Server {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
+                            .addLast(new IdleStateHandler(0, 0, IdleStateConstants.BEAT_TIMEOUT, TimeUnit.SECONDS))
+                            .addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 0))
                             .addLast(new RpcDecoder(RpcRequest.class, new KryoSerializer()))
                             .addLast(new RpcEncoder(RpcResponse.class, new KryoSerializer()))
                             .addLast(new ServiceInvokeHandler(invokerMap));

@@ -11,6 +11,14 @@ public class HelloDTO implements Serializable {
         this.name = name;
     }
 
+    @Override
+    public String toString() {
+        return "HelloDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public Integer getId() {
         return id;
     }

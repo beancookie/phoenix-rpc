@@ -2,6 +2,7 @@ package com.lzzz.phoenix.rpc;
 
 import com.lzzz.phoenix.common.codec.RpcDecoder;
 import com.lzzz.phoenix.common.codec.RpcEncoder;
+import com.lzzz.phoenix.common.constant.IdleStateConstants;
 import com.lzzz.phoenix.common.exception.ServiceNotFoundException;
 import com.lzzz.phoenix.common.model.RpcRequest;
 import com.lzzz.phoenix.common.model.RpcResponse;
@@ -15,6 +16,8 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +36,11 @@ public class ReferenceContext implements ServiceSelector, ServiceContainer, Serv
         this.onlineServiceMap = new ConcurrentHashMap<>();
         this.loadBalance = new SimpleLoadBalance(onlineServiceMap);
         this.threadPoolExecutor = new ThreadPoolExecutor(
-            4,
-            8,
+                Runtime.getRuntime().availableProcessors() * 2,
+                Runtime.getRuntime().availableProcessors() * 4,
             60L,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(1000)
+            new LinkedBlockingQueue<Runnable>(100)
         );
         this.eventLoopGroup = new NioEventLoopGroup(4);
     }
@@ -64,6 +67,8 @@ public class ReferenceContext implements ServiceSelector, ServiceContainer, Serv
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline()
+                            .addLast(new IdleStateHandler(0, 0, IdleStateConstants.BEAT_TIMEOUT, TimeUnit.SECONDS))
+                            .addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 0))
                             .addLast(new RpcEncoder(RpcRequest.class, new KryoSerializer()))
                             .addLast(new RpcDecoder(RpcResponse.class, new KryoSerializer()))
                             .addLast(new ReferenceInvokeHandler());
