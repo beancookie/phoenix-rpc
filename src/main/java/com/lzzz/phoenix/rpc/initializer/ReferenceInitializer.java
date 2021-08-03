@@ -18,12 +18,9 @@ import java.util.Objects;
 public class ReferenceInitializer implements ProxyFactory<Object>, BeanPostProcessor, InitializingBean {
     protected final ReferenceContext referenceContext = ReferenceContext.getInstance();
 
-    private final String registryAddress;
-
     private ServiceDiscovery serviceDiscovery;
 
     public ReferenceInitializer(String registryAddress) {
-        this.registryAddress = registryAddress;
         try {
             serviceDiscovery = new NacosServiceDiscovery(registryAddress);
         } catch (NacosException e) {
