@@ -69,8 +69,6 @@ public class NacosServiceDiscovery implements ServiceDiscovery {
                 instanceList.forEach(instance -> {
                     if (instance.isHealthy()) {
                         referenceContext.addService(buildProtocol(instance));
-                    } else {
-                        referenceContext.removeService(buildProtocol(instance));
                     }
                 });
             }

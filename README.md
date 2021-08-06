@@ -2,6 +2,7 @@
 <h3 align="center">轻量级Java RPC框架</h3>
 
 ### 快速开始
+#### 安装Nacos作为注册中心
 #### 1. Spring
 ```java
 public interface HelloService {

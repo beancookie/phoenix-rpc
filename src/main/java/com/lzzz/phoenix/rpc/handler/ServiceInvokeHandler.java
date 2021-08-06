@@ -13,14 +13,28 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class ServiceInvokeHandler extends SimpleChannelInboundHandler<RpcRequest> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceInvokeHandler.class);
 
     private final Map<String, Object> invokerMap;
 
+    private final ConcurrentMap<Class<?>, FastClass> invokerProxyCache = new ConcurrentHashMap<>();
+
     public ServiceInvokeHandler(Map<String, Object> handlerMap) {
         this.invokerMap = handlerMap;
+    }
+
+    private FastClass createProxy(Object invokerBean) {
+        if (invokerProxyCache.containsKey(invokerBean.getClass())) {
+            return invokerProxyCache.get(invokerBean.getClass());
+        } else {
+            FastClass invokerProxy = FastClass.create(invokerBean.getClass());
+            invokerProxyCache.put(invokerBean.getClass(), invokerProxy);
+            return invokerProxy;
+        }
     }
 
     protected Optional<Object> invoke(RpcRequest rpcRequest) throws InvocationTargetException {
@@ -29,7 +43,7 @@ public class ServiceInvokeHandler extends SimpleChannelInboundHandler<RpcRequest
             return Optional.empty();
         }
 
-        FastClass invokerProxy = FastClass.create(invokerBean.getClass());
+        FastClass invokerProxy = createProxy(invokerBean);
 
         Object result = invokerProxy.invoke(rpcRequest.getMethodName(), rpcRequest.getParameterTypes(), invokerBean, rpcRequest.getParameters());
         return Optional.ofNullable(result);

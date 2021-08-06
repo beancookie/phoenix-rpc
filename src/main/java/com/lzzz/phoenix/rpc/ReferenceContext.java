@@ -52,9 +52,11 @@ public class ReferenceContext implements ServiceSelector, ServiceContainer, Serv
 
     @Override
     public void removeService(SimpleProtocol protocol) {
-        ReferenceInvokeHandler invokeHandler = onlineServiceMap.get(protocol);
-        invokeHandler.getChannel().close();
-        onlineServiceMap.remove(protocol);
+        if (onlineServiceMap.containsKey(protocol)) {
+            ReferenceInvokeHandler invokeHandler = onlineServiceMap.get(protocol);
+            invokeHandler.getChannel().close();
+            onlineServiceMap.remove(protocol);
+        }
     }
 
     @Override
