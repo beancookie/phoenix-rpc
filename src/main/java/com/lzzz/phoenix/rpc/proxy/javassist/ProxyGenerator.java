@@ -140,8 +140,6 @@ public class ProxyGenerator {
 
         proxy.setModifiers(Modifier.PUBLIC);
 
-        proxy.writeFile(className + ".class");
-
         Class<?> proxyClass = proxy.toClass();
         proxyClass.getField("methods").set(null, methods.toArray(new Method[0]));
 
