@@ -9,9 +9,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class ServiceInitializer extends NettyServer implements ApplicationContextAware, InitializingBean, DisposableBean {
+
     public ServiceInitializer(String host, Integer port, String registryAddress) {
         super(host, port, registryAddress);
     }
@@ -35,4 +35,5 @@ public class ServiceInitializer extends NettyServer implements ApplicationContex
             super.addService(service.interfaceClass().getName(), service.version(), bean);
         });
     }
+
 }

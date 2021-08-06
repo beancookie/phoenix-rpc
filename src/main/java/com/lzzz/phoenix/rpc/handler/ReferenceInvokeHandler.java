@@ -8,15 +8,19 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ReferenceInvokeHandler extends SimpleChannelInboundHandler<RpcResponse> implements RequestSender {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReferenceInvokeHandler.class);
+
     private Channel channel;
 
-    private ConcurrentMap<String, ResponseFuture> futureHolder;
+    private ConcurrentMap<Long, ResponseFuture> futureHolder;
 
     public Channel getChannel() {
         return channel;
@@ -51,5 +55,11 @@ public class ReferenceInvokeHandler extends SimpleChannelInboundHandler<RpcRespo
             futureHolder.put(rpcRequest.getId(), responseFuture);
         }
         return responseFuture;
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.close();
+        LOGGER.error("ReferenceInvokeHandler error {}", cause.getMessage());
     }
 }

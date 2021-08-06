@@ -38,9 +38,9 @@ public class ReferenceContext implements ServiceSelector, ServiceContainer, Serv
         this.threadPoolExecutor = new ThreadPoolExecutor(
                 Runtime.getRuntime().availableProcessors() * 2,
                 Runtime.getRuntime().availableProcessors() * 4,
-            60L,
-            TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(100)
+                60L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(100)
         );
         this.eventLoopGroup = new NioEventLoopGroup(4);
     }
@@ -66,12 +66,12 @@ public class ReferenceContext implements ServiceSelector, ServiceContainer, Serv
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline()
-                            .addLast(new IdleStateHandler(0, 0, IdleStateConstants.BEAT_TIMEOUT, TimeUnit.SECONDS))
-                            .addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 0))
-                            .addLast(new RpcEncoder(RpcRequest.class, new KryoSerializer()))
-                            .addLast(new RpcDecoder(RpcResponse.class, new KryoSerializer()))
-                            .addLast(new ReferenceInvokeHandler());
+                            ch.pipeline()
+                                    .addLast(new IdleStateHandler(0, 0, IdleStateConstants.BEAT_TIMEOUT, TimeUnit.SECONDS))
+                                    .addLast(new LengthFieldBasedFrameDecoder(65536, 0, 4, 0, 0))
+                                    .addLast(new RpcEncoder(RpcRequest.class, new KryoSerializer()))
+                                    .addLast(new RpcDecoder(RpcResponse.class, new KryoSerializer()))
+                                    .addLast(new ReferenceInvokeHandler());
                         }
                     });
 

@@ -6,6 +6,8 @@ import com.lzzz.phoenix.common.util.ProtocolUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.sf.cglib.reflect.FastClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
@@ -13,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class ServiceInvokeHandler extends SimpleChannelInboundHandler<RpcRequest> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServiceInvokeHandler.class);
 
     private final Map<String, Object> invokerMap;
 
@@ -43,5 +46,11 @@ public class ServiceInvokeHandler extends SimpleChannelInboundHandler<RpcRequest
             response.setException(e);
         }
         ctx.writeAndFlush(response);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        ctx.close();
+        LOGGER.error("ServiceInvokeHandler error {}", cause.getMessage());
     }
 }

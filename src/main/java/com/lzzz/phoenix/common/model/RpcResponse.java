@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @date: 2021/07/19
  */
 public class RpcResponse implements Serializable {
-    private String requestId;
+    private Long requestId;
     private Exception exception;
     private Object result;
 
@@ -15,11 +15,11 @@ public class RpcResponse implements Serializable {
         return exception != null;
     }
 
-    public String getRequestId() {
+    public Long getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(String requestId) {
+    public void setRequestId(Long requestId) {
         this.requestId = requestId;
     }
 

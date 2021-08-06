@@ -27,10 +27,8 @@ public class HelloController {
         long startTime = System.currentTimeMillis();
         CountDownLatch latch = new CountDownLatch(10000);
         for (int i = 0; i < 10000; i++) {
-            System.out.println(i);
             pool.submit(() -> {
                 HelloDTO helloDTO = helloService.sayHello();
-                System.out.println(helloDTO);
                 latch.countDown();
             });
         }

@@ -1,6 +1,7 @@
 package com.lzzz.phoenix.common.model;
 
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author: LuZhong
@@ -8,19 +9,21 @@ import java.io.Serializable;
  */
 public class RpcRequest implements Serializable {
 
-    private String id;
+    private static final AtomicLong INVOKE_ID = new AtomicLong(0);
+
+    private Long id;
     private String className;
     private String methodName;
     private Class<?>[] parameterTypes;
     private Object[] parameters;
     private String version;
 
-    public String getId() {
-        return id;
+    public RpcRequest() {
+        this.id = INVOKE_ID.getAndIncrement();
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public String getClassName() {

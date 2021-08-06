@@ -38,7 +38,6 @@ public class NettyServer implements Server {
 
     private final String host;
     private final Integer port;
-    private final String registryAddress;
 
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
@@ -50,7 +49,6 @@ public class NettyServer implements Server {
     public NettyServer(String host, Integer port, String registryAddress) {
         this.host = host;
         this.port = port;
-        this.registryAddress = registryAddress;
 
         try {
             this.serviceRegistry = new NacosServiceRegistry(registryAddress);

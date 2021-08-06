@@ -5,24 +5,27 @@ import com.lzzz.phoenix.common.annotation.PhoenixReference;
 import com.lzzz.phoenix.rpc.ReferenceContext;
 import com.lzzz.phoenix.rpc.discovery.NacosServiceDiscovery;
 import com.lzzz.phoenix.rpc.discovery.ServiceDiscovery;
-import com.lzzz.phoenix.rpc.proxy.InvokerProxy;
-import com.lzzz.phoenix.rpc.proxy.ProxyFactory;
+import com.lzzz.phoenix.rpc.proxy.ProxyHandler;
+import com.lzzz.phoenix.rpc.proxy.ReferenceFactory;
+import com.lzzz.phoenix.rpc.proxy.javassist.JavassistProxyFactory;
+import com.lzzz.phoenix.rpc.proxy.javassist.ProxyFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Proxy;
 import java.util.Objects;
 
-public class ReferenceInitializer implements ProxyFactory<Object>, BeanPostProcessor, InitializingBean {
+public class ReferenceInitializer implements ReferenceFactory, BeanPostProcessor, InitializingBean {
     protected final ReferenceContext referenceContext = ReferenceContext.getInstance();
 
     private ServiceDiscovery serviceDiscovery;
+    private ProxyFactory proxyFactory;
 
     public ReferenceInitializer(String registryAddress) {
         try {
             serviceDiscovery = new NacosServiceDiscovery(registryAddress);
+            proxyFactory = new JavassistProxyFactory();
         } catch (NacosException e) {
             e.printStackTrace();
         }
@@ -37,11 +40,11 @@ public class ReferenceInitializer implements ProxyFactory<Object>, BeanPostProce
                 try {
                     field.setAccessible(true);
                     if (reference.interfaceClass() == void.class) {
-                        field.set(bean, createReference(field.getType(), reference.version()));
+                        field.set(bean, createReference(field.getType(), reference.version(), field));
                     } else {
-                        field.set(bean, createReference(reference.interfaceClass(), reference.version()));
+                        field.set(bean, createReference(reference.interfaceClass(), reference.version(), field));
                     }
-                } catch (IllegalAccessException e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -50,12 +53,8 @@ public class ReferenceInitializer implements ProxyFactory<Object>, BeanPostProce
     }
 
     @Override
-    public Object createReference(Class<?> interfaceClass, String version) {
-        return Proxy.newProxyInstance(
-            interfaceClass.getClassLoader(),
-            new Class<?>[] {interfaceClass},
-            new InvokerProxy<>(interfaceClass, version)
-        );
+    public Object createReference(Class<?> interfaceClass, String version, Object target) throws Throwable {
+        return proxyFactory.createReference(interfaceClass, new ProxyHandler<>(interfaceClass, version));
     }
 
     @Override
