@@ -5,7 +5,6 @@ import com.alibaba.nacos.api.naming.NamingFactory;
 import com.alibaba.nacos.api.naming.NamingService;
 import com.alibaba.nacos.api.naming.listener.NamingEvent;
 import com.alibaba.nacos.api.naming.pojo.Instance;
-import com.google.common.collect.Lists;
 import com.lzzz.phoenix.common.exception.ServiceNotFoundException;
 import com.lzzz.phoenix.common.protocol.ServiceProtocol;
 import com.lzzz.phoenix.common.protocol.SimpleProtocol;
@@ -17,11 +16,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.lzzz.phoenix.common.constant.ProtocolConstants.*;
 import static com.lzzz.phoenix.common.constant.ServiceNamespaceConstants.*;
-
 
 public class NacosServiceDiscovery implements ServiceDiscovery {
     private NamingService namingService;

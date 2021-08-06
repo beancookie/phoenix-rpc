@@ -1,6 +1,5 @@
 package com.lzzz.phoenix.rpc.proxy.javassist;
 
-
 import java.lang.reflect.InvocationHandler;
 
 public class JavassistProxyFactory implements ProxyFactory {

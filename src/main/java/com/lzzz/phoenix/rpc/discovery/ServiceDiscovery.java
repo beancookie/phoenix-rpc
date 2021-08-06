@@ -1,6 +1,5 @@
 package com.lzzz.phoenix.rpc.discovery;
 
-import com.alibaba.nacos.api.exception.NacosException;
 import com.lzzz.phoenix.common.protocol.SimpleProtocol;
 
 import java.util.List;

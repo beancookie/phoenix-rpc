@@ -2,7 +2,6 @@ package com.lzzz.phoenix.rpc.proxy.javassist;
 
 import com.lzzz.phoenix.common.util.ReflectUtils;
 import javassist.*;
-import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -130,7 +129,7 @@ public class ProxyGenerator {
                     sb.append(getParameterType(ets[i]));
                 }
             }
-            sb.append('{').append(code.toString()).append('}');
+            sb.append('{').append(code).append('}');
 
             CtMethod ctMethod = CtMethod.make(sb.toString(), proxy);
             proxy.addMethod(ctMethod);
